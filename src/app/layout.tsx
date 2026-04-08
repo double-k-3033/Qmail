@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "Qmail - Decentralized Email on Qubic",
   description:
     "Send messages, attach files, and transfer QU tokens with Qmail — the decentralized email client powered by Qubic Network.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

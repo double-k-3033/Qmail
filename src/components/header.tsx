@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -95,9 +96,14 @@ export function Header() {
         </Button>
 
         <div className="flex items-center gap-2 px-1 md:px-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shrink-0">
-            <span className="text-sm font-bold text-primary-foreground">Q</span>
-          </div>
+          <Image
+            src="/logo.svg"
+            alt="Qmail logo"
+            width={60}
+            height={60}
+            className="shrink-0"
+            priority
+          />
           <span className="text-lg md:text-xl font-semibold tracking-tight hidden sm:inline">
             Qmail
           </span>
