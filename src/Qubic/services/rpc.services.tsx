@@ -16,30 +16,43 @@ import type {
     TransferRequirement,
   } from "@/Qubic/types/rpc.types";
   import { uint8ArrayToBase64 } from "@/Qubic/utils/utils";
-  import axios from "axios";
   
-  const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.qubic.org";
   const EVENT_URL = process.env.NEXT_PUBLIC_EVENT_URL || "https://dev01.qubic.org";
-  
-  const rpc = axios.create({
-    baseURL: RPC_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    timeout: 10000, // 10 second timeout
-  });
-  
-  const qevent = axios.create({
-    baseURL: EVENT_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+
+  const JSON_HEADERS = { "Content-Type": "application/json" };
+
+  // All RPC calls go through the Next.js proxy route to avoid CORS issues.
+  // The path passed here should start with "/" e.g. "/v1/balances/..."
+  async function rpcGet<T = unknown>(path: string): Promise<{ data: T; status: number }> {
+    const res = await fetch(`/api/rpc${path}`, { headers: JSON_HEADERS });
+    const data = await res.json();
+    return { data, status: res.status };
+  }
+
+  async function rpcPost<T = unknown>(path: string, body: unknown): Promise<{ data: T; status: number }> {
+    const res = await fetch(`/api/rpc${path}`, {
+      method: "POST",
+      headers: JSON_HEADERS,
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    return { data, status: res.status };
+  }
+
+  async function qeventPost<T = unknown>(path: string, body: unknown): Promise<{ data: T }> {
+    const res = await fetch(`${EVENT_URL}${path}`, {
+      method: "POST",
+      headers: JSON_HEADERS,
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    return { data };
+  }
   
   export const fetchTickInfo = async (): Promise<TickInfo> => {
     try {
-      const tickResult = await rpc.get("/v1/tick-info");
-      const tick = await tickResult.data;
+      const tickResult = await rpcGet<{ tickInfo: TickInfo }>("/v1/tick-info");
+      const tick = tickResult.data;
       if (!tick || !tick.tickInfo) {
         console.warn("getTickInfo: Invalid tick");
         return {} as TickInfo;
@@ -52,8 +65,8 @@ import type {
   };
   
   export const fetchBalance = async (publicId: string): Promise<Balance> => {
-    const balanceResult = await rpc.get(`/v1/balances/${publicId}`);
-    const balance = await balanceResult.data;
+    const balanceResult = await rpcGet<{ balance: Balance }>(`/v1/balances/${publicId}`);
+    const balance = balanceResult.data;
     if (!balance || balance.balance == null) {
       console.warn("getBalance: Invalid balance");
       return {} as Balance;
@@ -89,8 +102,8 @@ import type {
     contractIdex = 1,
     issuer?: string
   ): Promise<number> => {
-    const assetsBalanceResult = await rpc.get(`/v1/assets/${publicId}/owned`);
-    const assetsBalance = await assetsBalanceResult.data;
+    const assetsBalanceResult = await rpcGet<{ ownedAssets: OwnedAssets[] }>(`/v1/assets/${publicId}/owned`);
+    const assetsBalance = assetsBalanceResult.data;
     if (!assetsBalance || !assetsBalance.ownedAssets) {
       console.warn("fetchAssetsBalance: Invalid assets balance");
       return 0;
@@ -110,8 +123,8 @@ import type {
   
   // all assets ownership contract address, assets name, and amount
   export const fetchAssetsOwnership = async (publicId: string): Promise<AssetsOwnership[]> => {
-    const assetsBalanceResult = await rpc.get(`/v1/assets/${publicId}/owned`);
-    const assetsBalance = await assetsBalanceResult.data;
+    const assetsBalanceResult = await rpcGet<{ ownedAssets: OwnedAssets[] }>(`/v1/assets/${publicId}/owned`);
+    const assetsBalance = assetsBalanceResult.data;
     if (!assetsBalance || !assetsBalance.ownedAssets) {
       console.warn("fetchAssetsBalance: Invalid assets balance");
       return [];
@@ -221,35 +234,30 @@ import type {
   };
   
   export const broadcastTx = async (tx: Uint8Array) => {
-    const url = `${RPC_URL}/v1/broadcast-transaction`;
     const txEncoded = uint8ArrayToBase64(tx);
     const body = { encodedTransaction: txEncoded };
-    const result = await rpc.post(url, body);
+    const result = await rpcPost("/v1/broadcast-transaction", body);
     console.log("result", result.data);
     return result.data;
   };
   
   export const fetchQuerySC = async (query: IQuerySC): Promise<IQuerySCResponse> => {
-    const queryResult = await rpc.post(`${RPC_URL}/v1/querySmartContract`, query);
+    const queryResult = await rpcPost<IQuerySCResponse>("/v1/querySmartContract", query);
     return queryResult.data;
   };
   
   export const fetchTxStatus = async (txId: string): Promise<TxStatus> => {
-    const txStatusResult = await rpc.get(`${RPC_URL}/v1/tx-status/${txId}`);
-    let txStatus = {} as { transactionStatus: TxStatus };
-    if (txStatusResult.status == 200) {
-      txStatus = await txStatusResult.data;
-    }
-    return txStatus.transactionStatus;
+    const txStatusResult = await rpcGet<{ transactionStatus: TxStatus }>(`/v1/tx-status/${txId}`);
+    return txStatusResult.data?.transactionStatus;
   };
   
   export const fetchLatestStats = async (): Promise<LatestStats> => {
-    const latestStatsResult = await rpc.get(`${RPC_URL}/v1/latest-stats`);
+    const latestStatsResult = await rpcGet<{ data: LatestStats }>(`/v1/latest-stats`);
     if (latestStatsResult.status !== 200) {
       console.warn("fetchLatestStats: Failed to fetch latest stats");
       return {} as LatestStats;
     }
-    const latestStats = await latestStatsResult.data;
+    const latestStats = latestStatsResult.data;
     if (!latestStats || !latestStats.data) {
       console.warn("fetchLatestStats: Invalid response data");
       return {} as LatestStats;
@@ -259,7 +267,7 @@ import type {
   
   export const fetchArchiverStatus = async (): Promise<ArchiverStatus> => {
     try {
-      const archiverStatusResult = await rpc.get(`${RPC_URL}/v1/status`);
+      const archiverStatusResult = await rpcGet<ArchiverStatus>(`/v1/status`);
       if (archiverStatusResult.status !== 200) {
         console.warn("fetchArchiverStatus: Failed to fetch archiver status");
         return {} as ArchiverStatus;
@@ -272,42 +280,35 @@ import type {
   };
   
   export const fetchRichList = async (page: number, pageSize: number): Promise<RichList> => {
-    const richListResult = await rpc.get(
-      `${RPC_URL}/v1/rich-list?page=${page}&pageSize=${pageSize}`,
-    );
-    const richList = await richListResult.data;
-    return richList;
+    const richListResult = await rpcGet<RichList>(`/v1/rich-list?page=${page}&pageSize=${pageSize}`);
+    return richListResult.data;
   };
   
   export const fetchTxHistory = async (publicId: string, startTick: number, endTick: number): Promise<TxHistory> => {
-    const txHistoryResult = await rpc.get(
-      `${RPC_URL}/v2/identities/${publicId}/transfers?startTick=${startTick}&endTick=${endTick}`,
+    const txHistoryResult = await rpcGet<{ data: TxHistory }>(
+      `/v2/identities/${publicId}/transfers?startTick=${startTick}&endTick=${endTick}`,
     );
-    const txHistory = await txHistoryResult.data;
-    return txHistory.data;
+    return txHistoryResult.data?.data;
   };
   
   export const fetchEpochTicks = async (epoch: number, page: number, pageSize: number): Promise<EpochTicks> => {
-    const epochTicksResult = await rpc.get(
-      `${RPC_URL}/v2/epochs/${epoch}/ticks?page=${page}&pageSize=${pageSize}`,
+    const epochTicksResult = await rpcGet<{ data: EpochTicks }>(
+      `/v2/epochs/${epoch}/ticks?page=${page}&pageSize=${pageSize}`,
     );
-    const epochTicks = await epochTicksResult.data;
-    return epochTicks.data;
+    return epochTicksResult.data?.data;
   };
   
   export const fetchApprovedTx = async (tick: number): Promise<TransactionInfo[]> => {
-    const approvedTxResult = await rpc.get(`${RPC_URL}/v1/ticks/${tick}/approved-transactions`);
-    const approvedTx = await approvedTxResult.data;
-    return approvedTx.approvedTransactions;
+    const approvedTxResult = await rpcGet<{ approvedTransactions: TransactionInfo[] }>(`/v1/ticks/${tick}/approved-transactions`);
+    return approvedTxResult.data?.approvedTransactions;
   };
   
   export const fetchTransactionInfo = async (txHash: string): Promise<TransactionInfo> => {
-    const transactionInfoResult = await rpc.get(`${RPC_URL}/v2/transactions/${txHash}`);
-    const transactionInfo = await transactionInfoResult.data;
-    return transactionInfo.transaction;
+    const transactionInfoResult = await rpcGet<{ transaction: TransactionInfo }>(`/v2/transactions/${txHash}`);
+    return transactionInfoResult.data?.transaction;
   };
   
   export const fetchTickEvents = async (tick: number): Promise<TickEvents> => {
-    const tickEventsResult = await qevent.post(`/v1/events/getTickEvents`, { tick });
+    const tickEventsResult = await qeventPost<TickEvents>(`/v1/events/getTickEvents`, { tick });
     return tickEventsResult.data;
   };
