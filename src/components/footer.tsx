@@ -31,22 +31,24 @@ function DiscordIcon({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background/50 backdrop-blur-sm">
-      <div className="flex h-12 items-center justify-between px-6">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <span>Powered by</span>
-          <span className="font-semibold text-foreground">Qubic Network</span>
-          <span className="text-border">|</span>
-          <span>0.15 GB of 1 GB used</span>
+    <footer className="border-t bg-background/50 backdrop-blur-sm shrink-0">
+      <div className="flex h-11 md:h-12 items-center justify-between px-3 md:px-6">
+        {/* Left: branding */}
+        <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-muted-foreground min-w-0">
+          <span className="hidden sm:inline">Powered by</span>
+          <span className="font-semibold text-foreground shrink-0">Qubic</span>
+          <span className="text-border hidden md:inline">|</span>
+          <span className="hidden md:inline">0.15 GB of 1 GB used</span>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="hidden sm:inline mr-2">Last account activity: 2 minutes ago</span>
+        {/* Right: social links + activity */}
+        <div className="flex items-center gap-0.5 md:gap-2 text-xs text-muted-foreground">
+          <span className="hidden lg:inline mr-2">Last activity: 2 min ago</span>
           <a
             href="https://twitter.com/qaboriq"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex h-9 w-9 md:h-8 md:w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent/80"
           >
             <TwitterIcon className="h-4 w-4" />
           </a>
@@ -54,7 +56,7 @@ export function Footer() {
             href="https://discord.gg/qubic"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex h-9 w-9 md:h-8 md:w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent/80"
           >
             <DiscordIcon className="h-4 w-4" />
           </a>
@@ -62,7 +64,7 @@ export function Footer() {
             href="https://github.com/qubic"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex h-9 w-9 md:h-8 md:w-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent/80"
           >
             <GithubIcon className="h-4 w-4" />
           </a>

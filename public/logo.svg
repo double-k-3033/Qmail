@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Decentralized Mail on Qubic Network Logo</title>
+  <desc id="desc">An original geometric logo combining a decentralized network frame with an envelope and a Q-like tail.</desc>
+  <defs>
+    <linearGradient id="gradStroke" x1="220" y1="220" x2="840" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="52%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="gradFill" x1="300" y1="280" x2="760" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E6FCFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#EDE9FE" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="nodeFill" x1="260" y1="260" x2="820" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Subtle halo -->
+  <circle cx="512" cy="512" r="370" fill="url(#gradStroke)" opacity="0.06"/>
+  <circle cx="512" cy="512" r="300" fill="#ffffff" opacity="0.82"/>
+
+  <!-- Network frame -->
+  <g filter="url(#softShadow)">
+    <path d="M 512.0 212.0 L 771.8 362.0 L 771.8 662.0 L 512.0 812.0 L 252.2 662.0 L 252.2 362.0 Z" fill="none" stroke="url(#gradStroke)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 771.8 662.0 L 900 790" fill="none" stroke="url(#gradStroke)" stroke-width="34" stroke-linecap="round"/>
+  </g>
+
+  <!-- Routing lines -->
+  <g opacity="0.7" stroke="url(#gradStroke)" stroke-width="14" stroke-linecap="round">
+    <path d="M 300 388 L 512 520 L 724 388" fill="none"/>
+    <path d="M 300 636 L 512 520 L 724 636" fill="none" opacity="0.35"/>
+  </g>
+
+  <!-- Envelope -->
+  <g filter="url(#softShadow)">
+    <rect x="268" y="336" width="488" height="340" rx="62" fill="url(#gradFill)" stroke="url(#gradStroke)" stroke-width="28"/>
+    <path d="M 308 392 L 512 540 L 716 392" fill="none" stroke="url(#gradStroke)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 308 636 L 448 534" fill="none" stroke="url(#gradStroke)" stroke-width="18" stroke-linecap="round" opacity="0.42"/>
+    <path d="M 716 636 L 576 534" fill="none" stroke="url(#gradStroke)" stroke-width="18" stroke-linecap="round" opacity="0.42"/>
+  </g>
+
+  <!-- Center signal -->
+  <g transform="translate(512 515)">
+    <circle r="30" fill="#ffffff" stroke="url(#gradStroke)" stroke-width="12"/>
+    <path d="M -54 -10 C -24 -48, 24 -48, 54 -10" fill="none" stroke="url(#gradStroke)" stroke-width="12" stroke-linecap="round"/>
+    <path d="M -84 -42 C -42 -94, 42 -94, 84 -42" fill="none" stroke="url(#gradStroke)" stroke-width="10" stroke-linecap="round" opacity="0.82"/>
+  </g>
+
+  <!-- Nodes -->
+  <g filter="url(#softShadow)">
+    <circle cx="512.0" cy="212.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/><circle cx="771.8" cy="362.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/><circle cx="771.8" cy="662.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/><circle cx="512.0" cy="812.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/><circle cx="252.2" cy="662.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/><circle cx="252.2" cy="362.0" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/>
+    <circle cx="900" cy="790" r="26" fill="#ffffff" stroke="url(#nodeFill)" stroke-width="16"/>
+  </g>
+</svg>
