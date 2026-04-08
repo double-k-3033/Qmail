@@ -1,8 +1,13 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/Qubic/utils/utils";
 import { Button } from "@/components/ui/button";
-import { useMailStore, type Folder } from "@/lib/store";
+import { useMailStore, type Folder } from "@/Qubic/lib/store";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   Inbox,
   Send,
@@ -26,14 +31,17 @@ const folders: { id: Folder; label: string; icon: typeof Inbox }[] = [
   { id: "trash", label: "Trash", icon: Trash2 },
 ];
 
-export function Sidebar() {
+function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
   const {
     selectedFolder,
     setSelectedFolder,
     setComposeOpen,
     emails,
     sidebarCollapsed,
+    setMobileSidebarOpen,
   } = useMailStore();
+
+  const collapsed = !isMobile && sidebarCollapsed;
 
   const getCount = (folder: Folder) => {
     if (folder === "starred") {
@@ -45,20 +53,25 @@ export function Sidebar() {
     return emails.filter((e) => e.folder === folder).length;
   };
 
+  const handleCompose = () => {
+    setComposeOpen(true);
+    if (isMobile) setMobileSidebarOpen(false);
+  };
+
   return (
-    <aside
+    <div
       className={cn(
-        "flex flex-col gap-1 border-r bg-background transition-all duration-200 py-3",
-        sidebarCollapsed ? "w-[68px] px-2" : "w-[256px] px-3"
+        "flex flex-col gap-1 py-3 h-full",
+        collapsed ? "px-2" : "px-3"
       )}
     >
       {/* Compose Button */}
-      <div className={cn("mb-3", sidebarCollapsed ? "px-0" : "px-1")}>
-        {sidebarCollapsed ? (
+      <div className={cn("mb-3", collapsed ? "px-0" : "px-1")}>
+        {collapsed ? (
           <Tooltip>
             <TooltipTrigger>
               <Button
-                onClick={() => setComposeOpen(true)}
+                onClick={handleCompose}
                 size="icon"
                 className="h-12 w-12 rounded-2xl shadow-md hover:shadow-lg transition-all"
               >
@@ -69,7 +82,7 @@ export function Sidebar() {
           </Tooltip>
         ) : (
           <Button
-            onClick={() => setComposeOpen(true)}
+            onClick={handleCompose}
             className="h-14 w-full gap-3 rounded-2xl shadow-md hover:shadow-lg text-base font-medium transition-all justify-start px-6"
           >
             <Plus className="h-5 w-5" />
@@ -85,7 +98,7 @@ export function Sidebar() {
           const isActive = selectedFolder === folder.id;
           const Icon = folder.icon;
 
-          if (sidebarCollapsed) {
+          if (collapsed) {
             return (
               <Tooltip key={folder.id}>
                 <TooltipTrigger>
@@ -121,13 +134,15 @@ export function Sidebar() {
               variant="ghost"
               onClick={() => setSelectedFolder(folder.id)}
               className={cn(
-                "h-9 justify-start gap-4 rounded-full px-4 font-normal",
+                "h-11 sm:h-9 justify-start gap-4 rounded-full px-4 font-normal",
                 isActive &&
                   "bg-primary/10 text-primary hover:bg-primary/15 font-semibold"
               )}
             >
-              <Icon className="h-4.5 w-4.5 shrink-0" />
-              <span className="flex-1 text-left">{folder.label}</span>
+              <Icon className="h-5 w-5 sm:h-4.5 sm:w-4.5 shrink-0" />
+              <span className="flex-1 text-left text-[15px] sm:text-sm">
+                {folder.label}
+              </span>
               {count > 0 && (
                 <span
                   className={cn(
@@ -146,7 +161,7 @@ export function Sidebar() {
       </nav>
 
       {/* Storage indicator */}
-      {!sidebarCollapsed && (
+      {!collapsed && (
         <div className="mt-auto px-4 pb-2">
           <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
             <div
@@ -159,6 +174,36 @@ export function Sidebar() {
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Desktop sidebar - hidden on mobile */
+export function DesktopSidebar() {
+  const { sidebarCollapsed } = useMailStore();
+
+  return (
+    <aside
+      className={cn(
+        "hidden md:flex flex-col border-r bg-background transition-all duration-200",
+        sidebarCollapsed ? "w-[68px]" : "w-[256px] lg:w-[280px]"
+      )}
+    >
+      <SidebarContent />
     </aside>
+  );
+}
+
+/** Mobile sidebar - sheet overlay, only on mobile/tablet */
+export function MobileSidebar() {
+  const { mobileSidebarOpen, setMobileSidebarOpen } = useMailStore();
+
+  return (
+    <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
+      <SheetContent side="left" className="w-[280px] p-0" showCloseButton={false}>
+        <SheetTitle className="sr-only">Navigation</SheetTitle>
+        <SidebarContent isMobile />
+      </SheetContent>
+    </Sheet>
   );
 }

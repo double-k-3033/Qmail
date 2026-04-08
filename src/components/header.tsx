@@ -10,17 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useMailStore } from "@/lib/store";
+import { useMailStore } from "@/Qubic/lib/store";
 import {
   Search,
   Menu,
   Sun,
   Moon,
-  Wallet,
   Settings,
   HelpCircle,
   LogOut,
-  ChevronDown,
+  X,
 } from "lucide-react";
 import {
   Tooltip,
@@ -28,44 +27,85 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ConnectLink from "@/Qubic/lib/wallet-connect/ConnectLink";
+import { useQubicConnect } from "@/Qubic/lib/wallet-connect/QubicConnectContext";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const { searchQuery, setSearchQuery, sidebarCollapsed, setSidebarCollapsed } =
-    useMailStore();
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress] = useState("QJKL...X8M9");
+  const {
+    searchQuery,
+    setSearchQuery,
+    sidebarCollapsed,
+    setSidebarCollapsed,
+    setMobileSidebarOpen,
+  } = useMailStore();
+  const { connected, wallet, disconnect } = useQubicConnect();
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  const walletAddress = wallet?.publicKey
+    ? wallet.publicKey.slice(0, 6) + "..." + wallet.publicKey.slice(-4)
+    : "";
+
+  // Mobile: expanded search takes over the header
+  if (mobileSearchOpen) {
+    return (
+      <header className="sticky top-0 z-50 flex h-14 items-center gap-2 border-b bg-background/80 backdrop-blur-lg px-2 md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 shrink-0"
+          onClick={() => {
+            setMobileSearchOpen(false);
+            setSearchQuery("");
+          }}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search mail"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="h-10 w-full rounded-full bg-secondary/60 pl-10 pr-4 border-none focus-visible:bg-background focus-visible:ring-1 transition-all"
+            autoFocus
+          />
+        </div>
+      </header>
+    );
+  }
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-2 border-b bg-background/80 backdrop-blur-lg px-4">
-      {/* Left: Logo + Menu */}
-      <div className="flex items-center gap-1">
-        <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="shrink-0"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Main menu</TooltipContent>
-        </Tooltip>
+    <header className="sticky top-0 z-50 flex h-14 md:h-16 items-center gap-1 md:gap-2 border-b bg-background/80 backdrop-blur-lg px-2 md:px-4">
+      {/* Left: Menu + Logo */}
+      <div className="flex items-center gap-0.5 md:gap-1 shrink-0">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 shrink-0"
+          onClick={() => {
+            if (typeof window !== "undefined" && window.innerWidth < 768) {
+              setMobileSidebarOpen(true);
+            } else {
+              setSidebarCollapsed(!sidebarCollapsed);
+            }
+          }}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
 
-        <div className="flex items-center gap-2 px-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+        <div className="flex items-center gap-2 px-1 md:px-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shrink-0">
             <span className="text-sm font-bold text-primary-foreground">Q</span>
           </div>
-          <span className="text-xl font-semibold tracking-tight hidden sm:inline">
+          <span className="text-lg md:text-xl font-semibold tracking-tight hidden sm:inline">
             Qmail
           </span>
         </div>
       </div>
 
-      {/* Center: Search */}
-      <div className="mx-auto flex w-full max-w-2xl items-center">
+      {/* Center: Search (desktop/tablet only) */}
+      <div className="hidden md:flex mx-auto w-full max-w-2xl items-center">
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -78,13 +118,23 @@ export function Header() {
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 md:gap-1 ml-auto shrink-0">
+        {/* Mobile search trigger */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 md:hidden"
+          onClick={() => setMobileSearchOpen(true)}
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+
         <Tooltip>
           <TooltipTrigger>
             <Button
               variant="ghost"
               size="icon"
-              className="hidden sm:inline-flex"
+              className="h-10 w-10 hidden lg:inline-flex"
             >
               <HelpCircle className="h-5 w-5" />
             </Button>
@@ -97,7 +147,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="hidden sm:inline-flex"
+              className="h-10 w-10 hidden lg:inline-flex"
             >
               <Settings className="h-5 w-5" />
             </Button>
@@ -111,6 +161,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
+              className="h-10 w-10"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -124,30 +175,25 @@ export function Header() {
         </Tooltip>
 
         {/* Wallet Connect */}
-        {walletConnected ? (
+        {connected ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Button
                 variant="outline"
-                className="gap-2 rounded-full h-9 pl-2 pr-3"
+                className="gap-1.5 md:gap-2 rounded-full h-9 pl-2 pr-2 md:pr-3"
               >
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
-                  <Wallet className="h-3.5 w-3.5 text-primary" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  Q
                 </div>
                 <span className="text-sm font-medium hidden md:inline">
                   {walletAddress}
                 </span>
-                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem className="gap-2">
-                <Wallet className="h-4 w-4" />
-                <span>12,450 QU</span>
-              </DropdownMenuItem>
               <DropdownMenuItem
-                className="gap-2 text-destructive"
-                onClick={() => setWalletConnected(false)}
+                className="gap-2 h-11 text-destructive"
+                onClick={() => disconnect()}
               >
                 <LogOut className="h-4 w-4" />
                 Disconnect
@@ -155,14 +201,7 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button
-            onClick={() => setWalletConnected(true)}
-            className="gap-2 rounded-full h-9"
-            size="sm"
-          >
-            <Wallet className="h-4 w-4" />
-            <span className="hidden sm:inline">Connect Wallet</span>
-          </Button>
+          <ConnectLink />
         )}
 
         {/* User Avatar */}
@@ -171,7 +210,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full h-9 w-9 ml-1"
+              className="rounded-full h-10 w-10"
             >
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
@@ -187,11 +226,11 @@ export function Header() {
                 user@qmail.qu
               </span>
             </div>
-            <DropdownMenuItem className="gap-2">
+            <DropdownMenuItem className="gap-2 h-11">
               <Settings className="h-4 w-4" />
               Account Settings
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 text-destructive">
+            <DropdownMenuItem className="gap-2 h-11 text-destructive">
               <LogOut className="h-4 w-4" />
               Sign Out
             </DropdownMenuItem>

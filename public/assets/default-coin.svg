@@ -1,0 +1,36 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle with gradient -->
+  <circle cx="24" cy="24" r="22" fill="url(#coinGradient)" stroke="url(#coinStroke)" stroke-width="2"/>
+  
+  <!-- Inner circle -->
+  <circle cx="24" cy="24" r="18" fill="url(#innerGradient)" opacity="0.8"/>
+  
+  <!-- Center symbol (Q) -->
+  <path d="M24 12C17.373 12 12 17.373 12 24C12 30.627 17.373 36 24 36C30.627 36 36 30.627 36 24C36 17.373 30.627 12 24 12ZM24 14C29.514 14 34 18.486 34 24C34 29.514 29.514 34 24 34C18.486 34 14 29.514 14 24C14 18.486 18.486 14 24 14ZM24 17C20.686 17 18 19.686 18 23C18 26.314 20.686 29 24 29C27.314 29 30 26.314 30 23C30 19.686 27.314 17 24 17ZM24 19C26.209 19 28 20.791 28 23C28 25.209 26.209 27 24 27C21.791 27 20 25.209 20 23C20 20.791 21.791 19 24 19Z" fill="white" opacity="0.3"/>
+  
+  <!-- Hexagon pattern (Qubic style) -->
+  <g opacity="0.9">
+    <path d="M24 16L27.464 18.25V22.75L24 25L20.536 22.75V18.25L24 16Z" stroke="white" stroke-width="1.5" fill="none"/>
+    <circle cx="24" cy="24" r="2" fill="white"/>
+  </g>
+  
+  <!-- Shine effect -->
+  <ellipse cx="18" cy="18" rx="8" ry="6" fill="white" opacity="0.15" transform="rotate(-45 18 18)"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="coinGradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1adef5"/>
+      <stop offset="100%" stop-color="#03c1db"/>
+    </linearGradient>
+    <linearGradient id="coinStroke" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#61f0fe"/>
+      <stop offset="100%" stop-color="#019ab8"/>
+    </linearGradient>
+    <linearGradient id="innerGradient" x1="24" y1="6" x2="24" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#61f0fe" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#03c1db" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+</svg>
+

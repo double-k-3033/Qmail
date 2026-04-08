@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="82.884 179.484 193.79 197.81" width="193.79px" height="197.81px">
+  <defs>
+    <linearGradient id="linearGradient-ssyoi6JCMX4Ra1XZh3eSiR" x1="4.24" y1="95.66" x2="184.96" y2="95.66" gradientTransform="matrix(0.0058234,0,0,0.0058234,-0.0508968,-0.0570697)">
+      <stop offset="0" stop-color="#2484c6"/>
+      <stop offset="1" stop-color="#2484c6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linearGradient-78vqw8Laed8TQQm1jUNT9T" x1="344.51" y1="-279.95" x2="532.23" y2="-279.95" gradientTransform="matrix(0.0005673,-0.0057957,0.0057957,0.0005673,1.8738643,3.1994527)">
+      <stop offset="0" stop-color="#2484c6"/>
+      <stop offset="1" stop-color="#2484c6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linearGradient-hzWLuuNLDbp4qktp6y46KH" x1="5.24" y1="95.66" x2="183.96" y2="95.66" gradientTransform="matrix(0,-0.0058234,0.0058234,0,-0.0570696,1.0508967)">
+      <stop offset="0" stop-color="#b2e2f4"/>
+      <stop offset="1" stop-color="#231f20"/>
+    </linearGradient>
+    <radialGradient id="radialGradient-pMMBhKJ39ei1aHedn15ypR" cx="94.8" cy="191.4" r="82.19" gradientTransform="matrix(0.0058311,0,0,0.0047351,-0.0662573,-0.3965672)">
+      <stop offset="0.09" stop-color="#fffefe"/>
+      <stop offset="0.54" stop-color="#78d1ee" stop-opacity=".5"/>
+      <stop offset="0.89" stop-color="#2484c6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle id="inner_ring_glow" cx="177.484" cy="265.344" r="85.86" fill="none" stroke-miterlimit="10" stroke="url(#linearGradient-ssyoi6JCMX4Ra1XZh3eSiR)" stroke-width="9px" transform-origin="center" style="stroke-width: 9; transform-origin: 177.484px 265.344px;">
+    <animateTransform attributeName="transform" type="rotate" begin="-0.00001" dur="3.00002" keyTimes="0; 1.0" values="0;-360" fill="freeze" additive="sum" calcMode="spline" keySplines="0 0 1 1" repeatCount="indefinite"/>
+  </circle>
+  <circle id="wide_angle_glow" cx="177.484" cy="265.344" r="85.86" fill="none" stroke-miterlimit="10" opacity=".68" stroke="url(#linearGradient-78vqw8Laed8TQQm1jUNT9T)" stroke-width="16px" transform-origin="center" style="stroke-width: 16; transform-origin: 177.484px 265.344px;">
+    <animateTransform attributeName="transform" type="rotate" begin="-0.00001" dur="3.00002" keyTimes="0; 1.0" values="0;360" fill="freeze" additive="sum" calcMode="spline" keySplines="0 0 1 1" repeatCount="indefinite"/>
+  </circle>
+  <path d="M 177.484 179.484 C 224.903 179.484 263.344 217.925 263.344 265.344 C 263.344 312.763 224.903 351.204 177.484 351.204 C 130.065 351.204 91.624 312.763 91.624 265.344 C 91.624 217.925 130.065 179.484 177.484 179.484 Z" fill="none" stroke="url(#linearGradient-hzWLuuNLDbp4qktp6y46KH)" stroke-width="7px" transform-origin="center" id="motion-path-noXy6bd6YHcJvtmY3MZo6U" style="stroke-width: 7; transform-origin: 177.484px 265.344px;">
+    <animateTransform attributeName="transform" type="rotate" begin="-0.00001" dur="3.00002" keyTimes="0; 1.0" values="0;-360" fill="freeze" additive="sum" calcMode="spline" keySplines="0 0 1 1" repeatCount="indefinite"/>
+  </path>
+  <rect id="surface_shine" y="343.504" width="193.79" height="33.79" fill="url(#radialGradient-pMMBhKJ39ei1aHedn15ypR)" x="82.884" style="stroke-width: 1;" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 1.4210854715202004e-14, 0)">
+    <animate attributeName="opacity" keyTimes="0; 0.5; 1" values="0.8;1;0.8" begin="-0.00001" dur="3.00002" fill="freeze" calcMode="spline" keySplines="0 0 1 1; 0 0 1 1" repeatCount="indefinite"/>
+  </rect>
+  <rect id="p_left" x="144.864" y="205.824" width="30.34" height="123.1" rx="6" ry="6" fill="#b2e2f4" style="stroke-width: 1;" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 1.4210854715202004e-14, 0)"/>
+  <rect id="p_right" x="183.764" y="205.824" width="30.34" height="99.55" rx="6" ry="6" fill="#b2e2f4" style="stroke-width: 1;" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 1.4210854715202004e-14, 0)"/>
+  <path d="M 177.484 179.724 C 224.903 179.724 263.344 218.165 263.344 265.584 C 263.344 313.003 224.903 351.444 177.484 351.444 C 130.065 351.444 91.624 313.003 91.624 265.584 C 91.624 218.165 130.065 179.724 177.484 179.724 Z" fill="none" stroke="#fff" stroke-width="3px" id="motion-path-jmf4QmrsZ3MZS8DkkqcCFN" style="stroke-width: 3;" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 1.4210854715202004e-14, 0)"/>
+</svg>

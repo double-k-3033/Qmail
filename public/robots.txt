@@ -1,0 +1,7 @@
+# Qubic Portal Swap - Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://swap.qubicportal.org/sitemap.xml
+

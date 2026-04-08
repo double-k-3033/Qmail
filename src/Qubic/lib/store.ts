@@ -33,6 +33,7 @@ interface MailState {
   searchQuery: string;
   selectedIds: Set<string>;
   sidebarCollapsed: boolean;
+  mobileSidebarOpen: boolean;
 
   setSelectedEmail: (email: Email | null) => void;
   setSelectedFolder: (folder: Folder) => void;
@@ -45,6 +46,7 @@ interface MailState {
   deselectAll: () => void;
   deleteSelected: () => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
+  setMobileSidebarOpen: (open: boolean) => void;
   sendEmail: (email: Omit<Email, "id" | "date" | "read" | "starred" | "folder">) => void;
 }
 
@@ -227,6 +229,7 @@ export const useMailStore = create<MailState>((set, get) => ({
   searchQuery: "",
   selectedIds: new Set<string>(),
   sidebarCollapsed: false,
+  mobileSidebarOpen: false,
 
   setSelectedEmail: (email) => {
     if (email) {
@@ -242,7 +245,7 @@ export const useMailStore = create<MailState>((set, get) => ({
   },
 
   setSelectedFolder: (folder) =>
-    set({ selectedFolder: folder, selectedEmail: null, selectedIds: new Set() }),
+    set({ selectedFolder: folder, selectedEmail: null, selectedIds: new Set(), mobileSidebarOpen: false }),
 
   setComposeOpen: (open) => set({ composeOpen: open }),
 
@@ -290,6 +293,8 @@ export const useMailStore = create<MailState>((set, get) => ({
     })),
 
   setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
+
+  setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
 
   sendEmail: (email) =>
     set((state) => ({
