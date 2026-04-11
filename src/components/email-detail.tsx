@@ -1,7 +1,8 @@
 "use client";
 
 import { useMailStore } from "@/Qubic/lib/store";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/Qubic/utils/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -41,9 +42,9 @@ function AttachmentCard({
   const Icon = iconMap[attachment.type] ?? FileText;
 
   const bgMap: Record<string, string> = {
-    image: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    document: "bg-red-500/10 text-red-600 dark:text-red-400",
-    archive: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    image: "bg-accent-secondary/10 text-accent-secondary",
+    document: "bg-warm-primary/10 text-warm-strong",
+    archive: "bg-accent-muted/15 text-accent-deep",
     qu: "bg-primary/10 text-primary",
   };
 
@@ -94,51 +95,62 @@ export function EmailDetail() {
       {/* Top toolbar */}
       <div className="flex h-12 md:h-10 items-center gap-0.5 md:gap-1 border-b px-2 shrink-0">
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 md:h-8 md:w-8"
-              onClick={() => setSelectedEmail(null)}
-            >
-              <ArrowLeft className="h-5 w-5 md:h-4 md:w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 md:h-8 md:w-8"
+            )}
+            onClick={() => setSelectedEmail(null)}
+          >
+            <ArrowLeft className="h-5 w-5 md:h-4 md:w-4" />
           </TooltipTrigger>
           <TooltipContent>Back to inbox</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-8 md:w-8">
-              <Archive className="h-5 w-5 md:h-4 md:w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 md:h-8 md:w-8"
+            )}
+          >
+            <Archive className="h-5 w-5 md:h-4 md:w-4" />
           </TooltipTrigger>
           <TooltipContent>Archive</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-8 md:w-8">
-              <Trash2 className="h-5 w-5 md:h-4 md:w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 md:h-8 md:w-8"
+            )}
+          >
+            <Trash2 className="h-5 w-5 md:h-4 md:w-4" />
           </TooltipTrigger>
           <TooltipContent>Delete</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-8 md:w-8 hidden sm:inline-flex">
-              <Printer className="h-5 w-5 md:h-4 md:w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 md:h-8 md:w-8 hidden sm:inline-flex"
+            )}
+          >
+            <Printer className="h-5 w-5 md:h-4 md:w-4" />
           </TooltipTrigger>
           <TooltipContent>Print</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-8 md:w-8">
-              <MoreVertical className="h-5 w-5 md:h-4 md:w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 md:h-8 md:w-8"
+            )}
+          >
+            <MoreVertical className="h-5 w-5 md:h-4 md:w-4" />
           </TooltipTrigger>
           <TooltipContent>More</TooltipContent>
         </Tooltip>
@@ -149,7 +161,7 @@ export function EmailDetail() {
         <div className="mx-auto max-w-4xl px-4 md:px-6 py-4 md:py-6">
           {/* Subject */}
           <div className="flex items-start gap-2 md:gap-3 mb-4 md:mb-6">
-            <h1 className="text-lg md:text-xl font-normal flex-1 leading-snug">
+            <h1 className="page-title text-lg md:text-xl font-normal flex-1 leading-snug">
               {selectedEmail.subject}
             </h1>
             <button

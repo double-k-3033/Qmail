@@ -133,10 +133,5 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [state.error]);
 
-  // TODO check this position
-  if (typeof window === "undefined") {
-    return <>{children}</>;
-  }
-
   return <MetaMaskContext.Provider value={[state, dispatch]}>{children}</MetaMaskContext.Provider>;
 };

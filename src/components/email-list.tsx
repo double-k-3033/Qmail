@@ -3,7 +3,7 @@
 import { cn } from "@/Qubic/utils/utils";
 import { useMailStore, type Email } from "@/Qubic/lib/store";
 import { formatDate } from "@/Qubic/lib/format";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -78,7 +78,10 @@ function EmailRow({ email }: { email: Email }) {
       <div className="flex md:hidden flex-1 min-w-0 flex-col gap-0.5 px-1">
         <div className="flex items-center justify-between gap-2">
           <span className="truncate text-sm font-medium">{email.from.name}</span>
-          <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
+          <span
+            className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0"
+            suppressHydrationWarning
+          >
             {formatDate(email.date)}
           </span>
         </div>
@@ -131,11 +134,14 @@ function EmailRow({ email }: { email: Email }) {
       <div className="hidden md:flex items-center gap-1 shrink-0">
         {hasQuAttachment && (
           <Tooltip>
-            <TooltipTrigger>
-              <div className="flex h-5 items-center gap-0.5 rounded-full bg-primary/10 px-1.5">
-                <Coins className="h-3 w-3 text-primary" />
-                <span className="text-[10px] font-bold text-primary">QU</span>
-              </div>
+            <TooltipTrigger
+              className={cn(
+                "inline-flex h-5 items-center gap-0.5 rounded-full bg-primary/10 px-1.5 font-sans shadow-none ring-0 outline-none",
+                "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              )}
+            >
+              <Coins className="h-3 w-3 text-primary" />
+              <span className="text-[10px] font-bold text-primary">QU</span>
             </TooltipTrigger>
             <TooltipContent>Contains QU token transfer</TooltipContent>
           </Tooltip>
@@ -148,57 +154,57 @@ function EmailRow({ email }: { email: Email }) {
       {/* Quick actions (desktop hover only) */}
       <div className="hidden shrink-0 items-center gap-0.5 md:group-hover:flex">
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleRead(email.id);
-              }}
-            >
-              {email.read ? (
-                <Mail className="h-3.5 w-3.5" />
-              ) : (
-                <MailOpen className="h-3.5 w-3.5" />
-              )}
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-7 w-7"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleRead(email.id);
+            }}
+          >
+            {email.read ? (
+              <Mail className="h-3.5 w-3.5" />
+            ) : (
+              <MailOpen className="h-3.5 w-3.5" />
+            )}
           </TooltipTrigger>
           <TooltipContent>
             {email.read ? "Mark as unread" : "Mark as read"}
           </TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Archive className="h-3.5 w-3.5" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-7 w-7"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Archive className="h-3.5 w-3.5" />
           </TooltipTrigger>
           <TooltipContent>Archive</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-7 w-7"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
           </TooltipTrigger>
           <TooltipContent>Delete</TooltipContent>
         </Tooltip>
       </div>
 
       {/* Date (desktop, hidden on hover when actions show) */}
-      <div className="hidden md:block shrink-0 px-2 text-xs text-muted-foreground md:group-hover:hidden whitespace-nowrap">
+      <div
+        className="hidden md:block shrink-0 px-2 text-xs text-muted-foreground md:group-hover:hidden whitespace-nowrap"
+        suppressHydrationWarning
+      >
         {formatDate(email.date)}
       </div>
     </div>
@@ -259,19 +265,25 @@ export function EmailList() {
         </div>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-9 w-9 md:h-8 md:w-8">
-              <RefreshCw className="h-4 w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-9 w-9 md:h-8 md:w-8"
+            )}
+          >
+            <RefreshCw className="h-4 w-4" />
           </TooltipTrigger>
           <TooltipContent>Refresh</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-9 w-9 md:h-8 md:w-8">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-9 w-9 md:h-8 md:w-8"
+            )}
+          >
+            <MoreVertical className="h-4 w-4" />
           </TooltipTrigger>
           <TooltipContent>More</TooltipContent>
         </Tooltip>
@@ -310,7 +322,7 @@ export function EmailList() {
         {filteredEmails.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground py-20 px-4">
             <Mail className="h-12 w-12 md:h-16 md:w-16 mb-4 opacity-20" />
-            <p className="text-base md:text-lg font-medium">No messages</p>
+            <p className="page-title text-base md:text-lg font-medium">No messages</p>
             <p className="text-sm text-center">
               {searchQuery
                 ? "No messages match your search"

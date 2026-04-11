@@ -64,8 +64,8 @@ export const StyledQRCode: React.FC<QRCodeProps> = ({
     size: 256,
     margin: 4,
     color: {
-      dark: "#000000",
-      light: "#FFFFFF",
+      dark: "#71eafc",
+      light: "#232c3b",
     },
     errorCorrectionLevel: "M",
     type: "image/png",
@@ -75,14 +75,14 @@ export const StyledQRCode: React.FC<QRCodeProps> = ({
     logoSize: 0.2,
     logoOpacity: 1,
     border: false,
-    borderColor: "#000000",
+    borderColor: "#2a3444",
     borderWidth: 2,
     shadow: false,
     shadowColor: "rgba(0, 0, 0, 0.2)",
     shadowBlur: 10,
     backgroundColor: "transparent",
     backgroundPattern: "none",
-    gradientColors: ["#667eea", "#764ba2"],
+    gradientColors: ["#71eafc", "#3a6d7d"],
   };
 
   const mergedOptions = { ...defaultOptions, ...options };
@@ -265,7 +265,12 @@ export const StyledQRCode: React.FC<QRCodeProps> = ({
 
   if (error) {
     return (
-      <div className={cn("flex items-center justify-center rounded-lg bg-red-50 p-4 text-red-600", className)}>
+      <div
+        className={cn(
+          "flex items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-destructive",
+          className,
+        )}
+      >
         <span className="text-sm">Error: {error}</span>
       </div>
     );
@@ -282,8 +287,8 @@ export const StyledQRCode: React.FC<QRCodeProps> = ({
         }}
       />
       {isLoading && (
-        <div className="bg-opacity-75 absolute inset-0 flex items-center justify-center rounded-lg bg-white">
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-card/80">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
         </div>
       )}
     </div>

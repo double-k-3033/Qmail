@@ -28,7 +28,10 @@ function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElem
   return (
     <h3
       data-slot="card-title"
-      className={cn("font-semibold leading-none tracking-tight", className)}
+      className={cn(
+        "font-heading font-semibold leading-none tracking-tight",
+        className
+      )}
       {...props}
     />
   )

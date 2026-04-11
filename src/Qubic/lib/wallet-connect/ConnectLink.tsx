@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-const ConnectLink: React.FC<{ darkMode?: boolean }> = ({ darkMode }) => {
+const ConnectLink: React.FC = () => {
   const { connected, showConnectModal, toggleConnectModal } = useQubicConnect();
   const [mounted, setMounted] = useState(false);
 
@@ -36,7 +36,7 @@ const ConnectLink: React.FC<{ darkMode?: boolean }> = ({ darkMode }) => {
       </Button>
       {mounted &&
         createPortal(
-          <ConnectModal open={showConnectModal} onClose={() => toggleConnectModal()} darkMode={darkMode} />,
+          <ConnectModal open={showConnectModal} onClose={() => toggleConnectModal()} />,
           document.body,
         )}
     </>

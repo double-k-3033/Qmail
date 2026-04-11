@@ -3,7 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMailStore, type Attachment } from "@/Qubic/lib/store";
 import { useQubicConnect } from "@/Qubic/lib/wallet-connect/QubicConnectContext";
-import { fetchBalance } from "@/Qubic/services/rpc.services";
+import { fetchBalance, fetchTickInfo, broadcastTx } from "@/Qubic/services/rpc.services";
+import { createTx } from "@/Qubic/services/tx.services";
+import { toast } from "sonner";
+
+const SKIP_PAYMENT = process.env.NEXT_PUBLIC_SKIP_PAYMENT === "true";
 import {
   Tooltip,
   TooltipContent,
@@ -63,16 +67,14 @@ const FILE_TYPE_ICONS: Record<FileTypeKey, LucideIcon> = {
   qu: Coins,
 };
 
-// Attachment chip colors use literal Tailwind classes so the JIT scanner picks
-// them up. They intentionally keep their own palette since they convey file-type
-// semantics that are independent of the light/dark surface.
+// File-type chips use the global accent / warm tokens (see globals.css).
 const FILE_TYPE_STYLES: Record<FileTypeKey, string> = {
   image:
-    "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20 hover:border-sky-500/40",
+    "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/20 hover:border-accent-secondary/40",
   document:
-    "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:border-rose-500/40",
+    "bg-warm-primary/10 text-warm-strong border-warm-primary/20 hover:border-warm-primary/35",
   archive:
-    "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:border-amber-500/40",
+    "bg-accent-muted/15 text-accent-deep border-accent-muted/25 hover:border-accent-muted/45",
   qu: "bg-primary/10 text-primary border-primary/20 hover:border-primary/40",
 };
 
@@ -324,7 +326,7 @@ function QuPopoverBody({ quAmount, onAmountChange, onAdd, walletBalance }: QuPop
 
 export function ComposeModal() {
   const { composeOpen, setComposeOpen, sendEmail } = useMailStore();
-  const { wallet, connected } = useQubicConnect();
+  const { wallet, connected, getSignedTx } = useQubicConnect();
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
 
   useEffect(() => {
@@ -463,7 +465,7 @@ export function ComposeModal() {
     setSent(false);
   }, []);
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(async () => {
     if (!canSend || isSending) return;
 
     const pendingAddr = parseAddress(toInput);
@@ -474,7 +476,35 @@ export function ComposeModal() {
     if (finalRecipients.length === 0) return;
 
     setIsSending(true);
-    setTimeout(() => {
+
+    try {
+      // ── Payment step ──────────────────────────────────────────────────────
+      const quAttachments = attachments.filter((a) => a.type === "qu" && a.quAmount);
+
+      if (quAttachments.length > 0) {
+        // if (SKIP_PAYMENT) {
+        //   // Testing bypass: skip on-chain tx and proceed directly to send
+        //   toast.info("Payment skipped (test mode)");
+        // } else {
+          if (!wallet?.publicKey) {
+            toast.error("Connect your wallet to send QU tokens");
+            setIsSending(false);
+            return;
+          }
+
+          const tickInfo = await fetchTickInfo();
+          const targetTick = tickInfo.tick + 5;
+
+          for (const att of quAttachments) {
+            const recipient = finalRecipients[0];
+            const tx = createTx(wallet.publicKey, recipient, att.quAmount!, targetTick);
+            const { tx: signedTx } = await getSignedTx(tx);
+            await broadcastTx(signedTx);
+          }
+        }
+      // }
+
+      // ── Email send step ───────────────────────────────────────────────────
       sendEmail({
         from: { name: "You", address: "user@qmail.qu" },
         to: finalRecipients.map((addr) => ({ name: addr, address: addr })),
@@ -483,6 +513,7 @@ export function ComposeModal() {
         body: `<p>${body.replace(/\n/g, "</p><p>")}</p>`,
         attachments,
       });
+
       setIsSending(false);
       setSent(true);
       setTimeout(() => {
@@ -490,7 +521,11 @@ export function ComposeModal() {
         setIsMinimized(false);
         resetDraft();
       }, 600);
-    }, 400);
+    } catch (err) {
+      console.error("Send failed:", err);
+      toast.error("Failed to send. Please try again.");
+      setIsSending(false);
+    }
   }, [
     canSend,
     isSending,
@@ -499,6 +534,8 @@ export function ComposeModal() {
     subject,
     body,
     attachments,
+    wallet,
+    getSignedTx,
     sendEmail,
     setComposeOpen,
     resetDraft,
@@ -843,7 +880,7 @@ export function ComposeModal() {
               "flex items-center gap-2 h-8 px-3.5 rounded-lg text-sm font-semibold transition-all duration-200",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
               sent
-                ? "bg-green-600 hover:bg-green-600 text-white"
+                ? "bg-accent-deep text-accent-primary hover:bg-accent-deep"
                 : canSend && !isSending
                   ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm active:scale-95"
                   : "bg-muted text-muted-foreground cursor-not-allowed"

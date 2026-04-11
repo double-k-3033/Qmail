@@ -40,7 +40,7 @@ const AccountSelector: React.FC<AccountSelectorProps> = ({
   return (
     <div className="relative w-full">
       {label && <Label className="mb-2 block">{label}</Label>}
-      <div className={cn("relative rounded-lg transition-all duration-200", error ? "border-error-40" : "")}>
+      <div className={cn("relative rounded-lg transition-all duration-200", error ? "border border-destructive" : "")}>
         <Select
           value={options[selected]?.value}
           onValueChange={(value: string | null) => {
@@ -50,7 +50,7 @@ const AccountSelector: React.FC<AccountSelectorProps> = ({
           }}
           disabled={isLoading}
         >
-          <SelectTrigger className={cn("w-full", error ? "border-error-40" : "")}>
+          <SelectTrigger className={cn("w-full", error ? "border-destructive" : "")}>
             <SelectValue placeholder="Select an option">{options[selected]?.label || "Select an option"}</SelectValue>
           </SelectTrigger>
           <SelectContent className="z-50 bg-background">
@@ -68,21 +68,21 @@ const AccountSelector: React.FC<AccountSelectorProps> = ({
             <div
               role="button"
               onClick={() => handleCopy(options[selected].value)}
-              className="hover:bg-card-border bg-card ml-2 cursor-pointer rounded p-1 transition-colors"
+              className="hover:bg-accent bg-card ml-2 cursor-pointer rounded p-1 transition-colors"
             >
               {isCopied ? (
-                <MdCheck className="text-success-40 h-4 w-4" />
+                <MdCheck className="h-4 w-4 text-accent-primary" />
               ) : (
-                <MdContentCopy className="h-4 w-4 text-gray-50" />
+                <MdContentCopy className="h-4 w-4 text-muted-foreground" />
               )}
             </div>
           </div>
         )}
       </div>
-      {error && <p className="text-error-40 text-right">{error}</p>}
+      {error && <p className="text-right text-destructive text-sm">{error}</p>}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="border-primary-40 h-5 w-5 animate-spin rounded-full border-2 border-t-transparent" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
       )}
     </div>
