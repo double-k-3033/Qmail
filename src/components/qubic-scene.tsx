@@ -27,7 +27,7 @@ function QubicLogo() {
         <mesh ref={meshRef}>
           <icosahedronGeometry args={[1.4, 1]} />
           <MeshDistortMaterial
-            color="#6366f1"
+            color="#6ebbd6"
             speed={2}
             distort={0.15}
             radius={1}
@@ -41,7 +41,7 @@ function QubicLogo() {
         <mesh ref={innerRef} scale={0.7}>
           <octahedronGeometry args={[1, 0]} />
           <MeshDistortMaterial
-            color="#818cf8"
+            color="#71eafc"
             speed={3}
             distort={0.2}
             radius={1}
@@ -53,7 +53,7 @@ function QubicLogo() {
         {/* Center glow */}
         <mesh scale={0.3}>
           <sphereGeometry args={[1, 32, 32]} />
-          <meshBasicMaterial color="#a5b4fc" transparent opacity={0.9} />
+          <meshBasicMaterial color="#6ebbd6" transparent opacity={0.9} />
         </mesh>
 
         {/* Orbiting particles */}
@@ -71,7 +71,7 @@ function QubicLogo() {
               scale={0.06}
             >
               <sphereGeometry args={[1, 16, 16]} />
-              <meshBasicMaterial color="#c7d2fe" transparent opacity={0.8} />
+              <meshBasicMaterial color="#71eafc" transparent opacity={0.8} />
             </mesh>
           );
         })}
@@ -90,7 +90,7 @@ export function QubicScene() {
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#818cf8" />
+          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#5b8193" />
           <QubicLogo />
         </Suspense>
       </Canvas>

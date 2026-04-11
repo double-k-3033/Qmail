@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +30,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import ConnectLink from "@/Qubic/lib/wallet-connect/ConnectLink";
 import { useQubicConnect } from "@/Qubic/lib/wallet-connect/QubicConnectContext";
+import { cn } from "@/Qubic/utils/utils";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -104,7 +105,7 @@ export function Header() {
             className="shrink-0"
             priority
           />
-          <span className="text-lg md:text-xl font-semibold tracking-tight hidden sm:inline">
+          <span className="text-lg md:text-xl font-heading font-semibold tracking-tight hidden sm:inline">
             Qmail
           </span>
         </div>
@@ -136,44 +137,41 @@ export function Header() {
         </Button>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 hidden lg:inline-flex"
-            >
-              <HelpCircle className="h-5 w-5" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 hidden lg:inline-flex"
+            )}
+          >
+            <HelpCircle className="h-5 w-5" />
           </TooltipTrigger>
           <TooltipContent>Support</TooltipContent>
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 hidden lg:inline-flex"
-            >
-              <Settings className="h-5 w-5" />
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "h-10 w-10 hidden lg:inline-flex"
+            )}
+          >
+            <Settings className="h-5 w-5" />
           </TooltipTrigger>
           <TooltipContent>Settings</TooltipContent>
         </Tooltip>
 
         {/* Theme Toggle */}
         <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
+          <TooltipTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "relative h-10 w-10"
+            )}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
           </TooltipTrigger>
           <TooltipContent>
             {theme === "dark" ? "Light mode" : "Dark mode"}
@@ -183,18 +181,18 @@ export function Header() {
         {/* Wallet Connect */}
         {connected ? (
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button
-                variant="outline"
-                className="gap-1.5 md:gap-2 rounded-full h-9 pl-2 pr-2 md:pr-3"
-              >
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                  Q
-                </div>
-                <span className="text-sm font-medium hidden md:inline">
-                  {walletAddress}
-                </span>
-              </Button>
+            <DropdownMenuTrigger
+              className={cn(
+                buttonVariants({ variant: "outline", size: "default" }),
+                "gap-1.5 md:gap-2 rounded-full h-9 pl-2 pr-2 md:pr-3"
+              )}
+            >
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                Q
+              </div>
+              <span className="text-sm font-medium hidden md:inline">
+                {walletAddress}
+              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem
@@ -212,18 +210,17 @@ export function Header() {
 
         {/* User Avatar */}
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full h-10 w-10"
-            >
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
-                  U
-                </AvatarFallback>
-              </Avatar>
-            </Button>
+          <DropdownMenuTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "rounded-full h-10 w-10"
+            )}
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
+                U
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <div className="flex flex-col px-3 py-2">

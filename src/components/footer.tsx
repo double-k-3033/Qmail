@@ -36,7 +36,9 @@ export function Footer() {
         {/* Left: branding */}
         <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-muted-foreground min-w-0">
           <span className="hidden sm:inline">Powered by</span>
-          <span className="font-semibold text-foreground shrink-0">Qubic</span>
+          <span className="font-heading font-semibold text-foreground shrink-0">
+            Qubic
+          </span>
           <span className="text-border hidden md:inline">|</span>
           <span className="hidden md:inline">0.15 GB of 1 GB used</span>
         </div>

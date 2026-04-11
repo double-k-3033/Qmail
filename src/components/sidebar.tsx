@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/Qubic/utils/utils";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useMailStore, type Folder } from "@/Qubic/lib/store";
 import {
   Sheet,
@@ -69,14 +69,14 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
       <div className={cn("mb-3", collapsed ? "px-0" : "px-1")}>
         {collapsed ? (
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                onClick={handleCompose}
-                size="icon"
-                className="h-12 w-12 rounded-2xl shadow-md hover:shadow-lg transition-all"
-              >
-                <Pencil className="h-5 w-5" />
-              </Button>
+            <TooltipTrigger
+              onClick={handleCompose}
+              className={cn(
+                buttonVariants({ variant: "default", size: "icon" }),
+                "h-12 w-12 rounded-2xl shadow-md hover:shadow-lg transition-all"
+              )}
+            >
+              <Pencil className="h-5 w-5" />
             </TooltipTrigger>
             <TooltipContent side="right">Compose</TooltipContent>
           </Tooltip>
@@ -101,24 +101,21 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
           if (collapsed) {
             return (
               <Tooltip key={folder.id}>
-                <TooltipTrigger>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setSelectedFolder(folder.id)}
-                    className={cn(
-                      "h-10 w-full rounded-full relative",
-                      isActive &&
-                        "bg-primary/10 text-primary hover:bg-primary/15 font-semibold"
-                    )}
-                  >
-                    <Icon className="h-5 w-5" />
-                    {folder.id === "inbox" && count > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-                        {count}
-                      </span>
-                    )}
-                  </Button>
+                <TooltipTrigger
+                  onClick={() => setSelectedFolder(folder.id)}
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "icon" }),
+                    "h-10 w-full rounded-full relative",
+                    isActive &&
+                      "bg-primary/10 text-primary hover:bg-primary/15 font-semibold"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  {folder.id === "inbox" && count > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                      {count}
+                    </span>
+                  )}
                 </TooltipTrigger>
                 <TooltipContent side="right">
                   {folder.label}

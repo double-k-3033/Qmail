@@ -2,6 +2,7 @@ import { StyledQRCode } from "@/Qubic/lib/wallet-connect/qr-code";
 import { QRCodePresets, downloadQRCode } from "@/Qubic/utils/qr-utils";
 import { copyText } from "@/Qubic/utils/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import { useContext, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,9 @@ import type { Account } from "./types";
 import { useWalletConnect } from "./WalletConnectContext";
 import AccountSelector from "@/Qubic/lib/wallet-connect/account-selector";
 
-const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () => void; darkMode?: boolean }) => {
+const ConnectModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [state] = useContext(MetaMaskContext);
 
   const [selectedMode, setSelectedMode] = useState("none");
@@ -102,7 +105,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
     <AnimatePresence>
       {open && (
         <motion.div
-          className="bg-smoke-light fixed top-0 left-0 z-50 flex h-full w-full overflow-x-hidden overflow-y-auto p-5"
+          className="fixed top-0 left-0 z-50 flex h-full w-full overflow-x-hidden overflow-y-auto bg-app-bg/70 p-5 backdrop-blur-sm"
           onClick={() => {
             setSelectedMode("none");
             onClose();
@@ -123,11 +126,11 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
             <Card className="bg-background text-foreground p-8">
               <motion.div className="flex items-center justify-between" variants={contentVariants}>
                 <img
-                  src={darkMode ? "/qubic-connect.svg" : "/qubic-connect-dark.svg"}
+                  src={isDark ? "/qubic-connect.svg" : "/qubic-connect-dark.svg"}
                   alt="Qubic Connect Logo"
                   className="h-6"
                 />
-                <IoClose onClick={onClose} className="h-5 w-5 cursor-pointer" />
+                <IoClose onClick={onClose} className="h-5 w-5 cursor-pointer text-foreground" />
               </motion.div>
 
               <AnimatePresence mode="wait">
@@ -270,7 +273,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
 
                 {selectedMode === "account-select" && (
                   <motion.div
-                    className="mt-4 text-[rgba(128,139,155,1)]"
+                    className="mt-4 text-muted-foreground"
                     variants={contentVariants}
                     initial="hidden"
                     animate="visible"
@@ -318,7 +321,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
 
                 {selectedMode === "account-select-vault" && (
                   <motion.div
-                    className="mt-4 text-[rgba(128,139,155,1)]"
+                    className="mt-4 text-muted-foreground"
                     variants={contentVariants}
                     initial="hidden"
                     animate="visible"
@@ -359,7 +362,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
 
                 {selectedMode === "metamask" && (
                   <motion.div
-                    className="mt-4 text-[rgba(128,139,155,1)]"
+                    className="mt-4 text-muted-foreground"
                     variants={contentVariants}
                     initial="hidden"
                     animate="visible"
@@ -376,7 +379,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
                           onClose();
                         }}
                       />
-                      <Button variant="outline" className="text-primary-40" onClick={() => setSelectedMode("none")}>
+                      <Button variant="outline" className="text-primary" onClick={() => setSelectedMode("none")}>
                         Cancel
                       </Button>
                     </div>
@@ -385,7 +388,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
 
                 {selectedMode === "walletconnect" && (
                   <motion.div
-                    className="mt-4 text-[rgba(128,139,155,1)]"
+                    className="mt-4 text-muted-foreground"
                     variants={contentVariants}
                     initial="hidden"
                     animate="visible"
@@ -400,11 +403,11 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
                             options={{
                               ...QRCodePresets.walletConnect,
                               color: {
-                                dark: darkMode ? "#ffffff" : "#000000",
-                                light: darkMode ? "#1f2937" : "#ffffff",
+                                dark: isDark ? "#71eafc" : "#111720",
+                                light: isDark ? "#232c3b" : "#ffffff",
                               },
-                              borderColor: darkMode ? "#374151" : "#e5e7eb",
-                              shadowColor: darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+                              borderColor: isDark ? "#2a3444" : "#cbd5e1",
+                              shadowColor: isDark ? "rgba(113, 234, 252, 0.1)" : "rgba(15, 23, 42, 0.08)",
                               backgroundColor: "transparent",
                             }}
                             className="mx-auto transition-all duration-300 hover:scale-105"
@@ -443,7 +446,7 @@ const ConnectModal = ({ open, onClose, darkMode }: { open: boolean; onClose: () 
                       >
                         Open in Qubic Wallet
                       </Button>
-                      <Button variant="outline" className="text-primary-40" onClick={() => setSelectedMode("none")}>
+                      <Button variant="outline" className="text-primary" onClick={() => setSelectedMode("none")}>
                         Cancel
                       </Button>
                     </div>
